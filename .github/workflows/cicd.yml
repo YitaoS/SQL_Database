@@ -9,23 +9,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      # Checkout code using the latest version of the action
+      - uses: actions/checkout@v3
 
+      # Set up Python environment
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.9'
 
+      # Install dependencies
       - name: Install dependencies
         run: pip install -r Requirements.txt
 
+      # Run tests
       - name: Run tests
         run: python test.py
 
       # Upload test outputs and .db file as artifacts using the new version
       - name: Upload Database and Logs
-        if: always()  # This ensures the step runs even if previous steps fail
-        uses: actions/upload-artifact@v3  # Updated to the latest version
+        if: always()  # Ensure the step runs even if previous steps fail
+        uses: actions/upload-artifact@v3  # Use the latest version
         with:
           name: test-results
           path: |
@@ -33,17 +37,22 @@ jobs:
             testOutputs.md
             queryLog.md
 
-      # Push changes to the repository if the .md or .png files are updated
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          force: true
+      # Set up Git configuration for pushing changes
+      - name: Set up Git
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+
+      # Add and commit changes
+      - name: Commit changes
+        run: |
           git add ./*.md
           git add ./*.png
-          git commit -m "Add report and images"
+          git commit -m "Add report and images" || echo "No changes to commit"
+
+      # Push changes back to the repository using a manual Git push
+      - name: Push changes
+        run: |
           git push origin ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
