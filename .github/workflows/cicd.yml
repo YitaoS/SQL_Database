@@ -22,13 +22,28 @@ jobs:
       - name: Run tests
         run: python test.py
 
-      # Upload test outputs and .db file as artifacts after tests run
+      # Upload test outputs and .db file as artifacts using the new version
       - name: Upload Database and Logs
         if: always()  # This ensures the step runs even if previous steps fail
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Updated to the latest version
         with:
           name: test-results
           path: |
             database1.db
             testOutputs.md
             queryLog.md
+
+      # Push changes to the repository if the .md or .png files are updated
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          force: true
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add ./*.md
+          git add ./*.png
+          git commit -m "Add report and images"
+          git push origin ${{ github.ref }}
