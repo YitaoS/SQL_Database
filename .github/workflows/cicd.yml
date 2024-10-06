@@ -1,0 +1,34 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r Requirements.txt
+
+      - name: Run tests
+        run: python test.py
+
+      # Upload test outputs and .db file as artifacts after tests run
+      - name: Upload Database and Logs
+        if: always()  # This ensures the step runs even if previous steps fail
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: |
+            database1.db
+            testOutputs.md
+            queryLog.md

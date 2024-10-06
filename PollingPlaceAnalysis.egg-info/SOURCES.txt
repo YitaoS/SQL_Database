@@ -1,0 +1,8 @@
+README.md
+setup.py
+PollingPlaceAnalysis.egg-info/PKG-INFO
+PollingPlaceAnalysis.egg-info/SOURCES.txt
+PollingPlaceAnalysis.egg-info/dependency_links.txt
+PollingPlaceAnalysis.egg-info/entry_points.txt
+PollingPlaceAnalysis.egg-info/requires.txt
+PollingPlaceAnalysis.egg-info/top_level.txt
