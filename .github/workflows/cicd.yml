@@ -52,8 +52,7 @@ jobs:
       - name: Commit changes
         run: |
           git add ./*.md
-          git add ./*.png
-          git commit -m "Add report and images" || echo "No changes to commit"
+          git commit -m "Add report and log" || echo "No changes to commit"
 
       # Push changes back to the repository using a manual Git push
       - name: Push changes
