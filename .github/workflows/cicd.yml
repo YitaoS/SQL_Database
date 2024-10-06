@@ -20,11 +20,16 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: pip install -r Requirements.txt
-
+        run: make install
+      # format code
+      - name: Format code
+        run: make format
+      # lint code
+      - name: Lint code
+        run: make lint
       # Run tests
       - name: Run tests
-        run: python test.py
+        run: make test
 
       # Upload test outputs and .db file as artifacts using the new version
       - name: Upload Database and Logs
